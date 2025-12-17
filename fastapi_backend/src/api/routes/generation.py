@@ -5,7 +5,8 @@ import hashlib
 import json
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Body, HTTPException, status
+from fastapi import APIRouter, Body, status
+from ...api.errors import DomainError
 from pydantic import BaseModel, Field
 
 from ...config import resolve_download_url
@@ -179,9 +180,11 @@ def get_router() -> APIRouter:
         warnings.extend([f"pages: {e}" for e in page_errors])
         if page_errors:
             # Cannot proceed without valid pages
-            raise HTTPException(
+            raise DomainError(
+                code="INVALID_PAGES",
+                message="Invalid pages",
                 status_code=422,
-                detail={"message": "Invalid pages", "errors": page_errors},
+                details={"errors": page_errors},
             )
 
         # Branding/style merge: request.branding overrides parsed branding
@@ -297,9 +300,11 @@ def get_router() -> APIRouter:
         warnings.extend([f"site: {e}" for e in site_errors])
         warnings.extend([f"pages: {e}" for e in page_errors])
         if page_errors:
-            raise HTTPException(
+            raise DomainError(
+                code="INVALID_PREVIEW_PAGE",
+                message="Invalid preview page",
                 status_code=422,
-                detail={"message": "Invalid preview page", "errors": page_errors},
+                details={"errors": page_errors},
             )
 
         branding = req.branding or {}

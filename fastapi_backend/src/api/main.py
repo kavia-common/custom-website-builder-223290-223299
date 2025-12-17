@@ -3,12 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.routing import APIRouter
 
 # Import versioned API router
-try:
-    # Local import to avoid circular dependencies
-    from .routes.generation import router as generation_router
-except Exception:
-    # If the generation router is not yet available, create a fallback empty router.
-    generation_router = APIRouter(prefix="/generation", tags=["Generation"])
+from .routes.generation import router as generation_router
 
 openapi_tags = [
     {
@@ -45,6 +40,17 @@ app.add_middleware(
 def health_check():
     """Return a simple health check message indicating the API is running."""
     return {"message": "Healthy"}
+
+# API usage note for WebSocket (not used currently) to keep docs explicit
+@app.get(
+    "/api/v1/docs-info",
+    tags=["Health"],
+    summary="API usage notes",
+    description="This API currently exposes REST endpoints only. No WebSocket interfaces are used.",
+)
+def docs_info():
+    """Provide a brief usage note for clients browsing the docs."""
+    return {"websocket": False, "notes": "Use REST endpoints under /api/v1."}
 
 # Mount versioned API router at /api/v1
 api_v1 = APIRouter(prefix="/api/v1")

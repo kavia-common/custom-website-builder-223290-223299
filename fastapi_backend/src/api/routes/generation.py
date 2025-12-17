@@ -31,11 +31,9 @@ def get_router() -> APIRouter:
     """Return the APIRouter for generation endpoints.
 
     Routes
-    - POST /api/v1/generation/generate: Validate input, parse requirements, render templates,
-      bundle assets, optionally persist zip using LocalStorage, and return a response
-      containing inline assets and an optional download URL.
-    - GET /api/v1/generation/styles: Return default theme tokens and allowed override keys.
-    - POST /api/v1/generation/preview: Render a single-page preview with inline CSS/JS.
+    - POST /api/v1/generation/generate and POST /api/v1/generate
+    - GET /api/v1/generation/styles and GET /api/v1/styles
+    - POST /api/v1/generation/preview and POST /api/v1/preview
 
     The router is created lazily to avoid import side effects in app startup.
     """
@@ -53,9 +51,9 @@ def get_router() -> APIRouter:
         return {
             "message": "Generation API surface is available.",
             "endpoints": [
-                "POST /api/v1/generation/generate",
-                "GET /api/v1/generation/styles",
-                "POST /api/v1/generation/preview",
+                "POST /api/v1/generate",
+                "GET /api/v1/styles",
+                "POST /api/v1/preview",
             ],
         }
 
@@ -330,6 +328,55 @@ def get_router() -> APIRouter:
             preview=artifacts,
             warnings=warnings or None,
         )
+
+    # Additionally expose the endpoints at the API root (/api/v1) by registering aliases.
+    # These "no-prefix" routes will be mounted by the main API router at /api/v1.
+    public_router = APIRouter(tags=["Generation"])
+
+    # PUBLIC_INTERFACE
+    @public_router.get(
+        "/styles",
+        summary="Get default style tokens",
+        description="Return the default Ocean Professional theme tokens and allowed override keys.",
+        operation_id="styles_get",
+    )
+    def public_get_styles():
+        return get_styles()  # reuse logic
+
+    # PUBLIC_INTERFACE
+    @public_router.post(
+        "/generate",
+        summary="Generate website artifacts",
+        description="Generate artifacts and optionally persist a ZIP, returning inline assets and an optional zipUrl.",
+        operation_id="generate_post",
+        response_model=GenerateResponseModel,
+        status_code=status.HTTP_200_OK,
+    )
+    def public_generate(
+        request: GenerationRequest = Body(
+            ...,
+            description="User idea, requirements, and optional structured specs.",
+        ),
+        options: GenerateOptions = Body(
+            default=GenerateOptions(),
+            description="Generation options controlling persistence and other behavior.",
+        ),
+    ):
+        return generate_site(request=request, options=options)
+
+    # PUBLIC_INTERFACE
+    @public_router.post(
+        "/preview",
+        summary="Render a single-page preview",
+        description="Render a one-page preview with inline CSS and JS.",
+        operation_id="preview_post",
+        response_model=PreviewResponseModel,
+    )
+    def public_preview(req: "PreviewRequest"):
+        return preview(req)
+
+    # Attach the public router without prefix when included upstream
+    router.include_router(public_router, prefix="")
 
     return router
 

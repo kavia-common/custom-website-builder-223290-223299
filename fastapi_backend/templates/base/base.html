@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ site.site_title or 'My Site' }}</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    {% include 'base/components/navbar.html' %}
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    {% include 'base/components/footer.html' %}
+    <script src="assets/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<header class="navbar">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">{{ site.site_title or 'My Site' }}</a>
+    <nav class="nav">
+      <ul>
+        {% for item in site.navigation or [] %}
+        <li><a href="{{ item.href }}">{{ item.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>

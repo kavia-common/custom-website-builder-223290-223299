@@ -1,0 +1,12 @@
+<footer class="footer">
+  <div class="footer-inner">
+    <p>&copy; {{ (site.year or 2025) }} {{ site.site_title or 'My Site' }}. All rights reserved.</p>
+    {% if site.footer and site.footer.links %}
+    <ul class="footer-links">
+      {% for link in site.footer.links %}
+      <li><a href="{{ link.href }}" target="_blank" rel="noopener">{{ link.label }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</footer>

@@ -1,0 +1,85 @@
+{
+  "portfolio": {
+    "idea": "Personal portfolio for a product designer showcasing case studies and contact options.",
+    "requirements": "Pages: home, about, portfolio, contact. Include a contact form and simple analytics. Primary color: #1E40AF. Font: Inter. variables:\n  --radius-md: 12px\n  --elev-1: 0 2px 4px rgba(0,0,0,.08)",
+    "pages": [
+      { "name": "home", "title": "Welcome" },
+      { "name": "portfolio", "title": "Work" },
+      { "name": "about", "title": "About Me" },
+      { "name": "contact", "title": "Contact" }
+    ],
+    "features": [
+      { "name": "contact_form", "enabled": true },
+      { "name": "analytics", "enabled": true }
+    ],
+    "branding": {
+      "primary_color": "#1E40AF",
+      "secondary_color": "#F59E0B",
+      "font_family": "Inter, ui-sans-serif, system-ui"
+    },
+    "style_overrides": {
+      "css_variables": {
+        "--radius-md": "12px",
+        "--elev-1": "0 2px 4px rgba(0,0,0,.08)"
+      },
+      "global_css": ".hero h1 { letter-spacing: -0.01em; }"
+    },
+    "target_stack": "static-html"
+  },
+
+  "product_landing": {
+    "idea": "SaaS product landing page focusing on conversions with pricing and FAQ.",
+    "requirements": "Pages: home, pricing, faq. Include analytics and newsletter subscription. Primary color: #2563EB, Secondary: #F59E0B. variables:\n  --color-accent: #10B981",
+    "pages": [
+      { "name": "home", "title": "Acme SaaS" },
+      { "name": "pricing", "title": "Pricing" },
+      { "name": "faq", "title": "FAQ" }
+    ],
+    "features": [
+      { "name": "analytics", "enabled": true },
+      { "name": "newsletter", "enabled": true }
+    ],
+    "branding": {
+      "primary_color": "#2563EB",
+      "secondary_color": "#F59E0B",
+      "accent_color": "#10B981",
+      "font_family": "Inter, ui-sans-serif, system-ui"
+    },
+    "style_overrides": {
+      "css_variables": {
+        "--color-accent": "#10B981"
+      }
+    },
+    "target_stack": "static-html"
+  },
+
+  "blog": {
+    "idea": "Minimal personal blog with an about page and posts overview.",
+    "requirements": "Pages: home, blog, about. Use a gentle accent and rounded corners. Accent color: #A855F7. variables:\n  --radius-md: 14px",
+    "pages": [
+      { "name": "home", "title": "My Blog" },
+      { "name": "blog", "title": "Posts" },
+      { "name": "about", "title": "About" }
+    ],
+    "features": [
+      { "name": "blog", "enabled": true }
+    ],
+    "branding": {
+      "accent_color": "#A855F7",
+      "font_family": "Georgia, ui-serif, system-ui"
+    },
+    "style_overrides": {
+      "css_variables": {
+        "--radius-md": "14px"
+      }
+    },
+    "target_stack": "static-html"
+  },
+
+  "notes": [
+    "Ocean Professional is the default theme. If you omit branding and style_overrides, defaults from /api/v1/styles are applied.",
+    "style_overrides.css_variables accepts any key listed in GET /api/v1/styles 'allowedOverrideKeys'.",
+    "style_overrides.global_css is appended to the generated assets/styles.css so be cautious with specificity.",
+    "Set options.persist_zip=true when calling POST /api/v1/generate to receive a zipUrl (absolute if BASE_URL is configured)."
+  ]
+}
